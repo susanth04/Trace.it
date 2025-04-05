@@ -1,0 +1,196 @@
+/* ProjectDetails.css */
+.project-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem 0;
+  }
+  
+  .project-details h2 {
+    margin-bottom: 1.5rem;
+    color: #1a237e;
+  }
+  
+  .project-info {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .info-item {
+    margin-bottom: 1rem;
+  }
+  
+  .info-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .info-item .label {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .info-item p {
+    margin-top: 0.25rem;
+  }
+  
+  .address {
+    font-family: monospace;
+    background-color: #f5f7fa;
+    padding: 0.5rem;
+    border-radius: 4px;
+    overflow-wrap: break-word;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  .status.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status.inactive {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  .fund-status {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .fund-status h3 {
+    margin-bottom: 1.5rem;
+    color: #303f9f;
+  }
+  
+  .fund-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .fund-box {
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .fund-box.allocated {
+    background-color: #e8f5e9;
+  }
+  
+  .fund-box.spent {
+    background-color: #fff3e0;
+  }
+  
+  .fund-box.remaining {
+    background-color: #e3f2fd;
+  }
+  
+  .fund-box .amount {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .fund-box .label {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .progress-container {
+    margin-top: 1.5rem;
+  }
+  
+  .progress-bar {
+    height: 12px;
+    background-color: #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  
+  .progress {
+    height: 100%;
+    background-color: #3949ab;
+    border-radius: 6px;
+  }
+  
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #666;
+  }
+  
+  .spend-funds-section {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .spend-funds-section h3 {
+    margin-bottom: 1.5rem;
+    color: #303f9f;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .spend-button {
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .spend-button:hover:not(:disabled) {
+    background-color: #e65100;
+  }
+  
+  .spend-button:disabled {
+    background-color: #ffcc80;
+    cursor: not-allowed;
+  }
+  
