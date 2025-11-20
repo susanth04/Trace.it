@@ -25,7 +25,7 @@ export async function switchToSepolia() {
             {
               chainId: "0xaa36a7",
               chainName: "Sepolia",
-              rpcUrls: ["https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+              rpcUrls: [`https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`],
               nativeCurrency: {
                 name: "Sepolia ETH",
                 symbol: "sepETH",

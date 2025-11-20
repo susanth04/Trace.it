@@ -11,7 +11,7 @@ if (window.ethereum) {
   // Fallback to Sepolia testnet via public RPC
   web3 = new Web3(
     new Web3.providers.HttpProvider(
-      "https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+      `https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`
     )
   );
 }
