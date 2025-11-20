@@ -43,31 +43,41 @@ const Login = () => {
             const walletAddress = await getAccount();
             setAccount(walletAddress);
 
-            // Sign in to Firebase anonymously (or you can use custom auth)
-            const userCredential = await signInAnonymously(auth);
-            const user = userCredential.user;
+            // Only use Firebase if it's configured
+            if (auth && db) {
+                try {
+                    // Sign in to Firebase anonymously (or you can use custom auth)
+                    const userCredential = await signInAnonymously(auth);
+                    const user = userCredential.user;
 
-            // Store user profile in Firestore
-            const userDocRef = doc(db, 'users', walletAddress.toLowerCase());
-            const userDoc = await getDoc(userDocRef);
+                    // Store user profile in Firestore
+                    const userDocRef = doc(db, 'users', walletAddress.toLowerCase());
+                    const userDoc = await getDoc(userDocRef);
 
-            if (!userDoc.exists()) {
-                // Create new user profile
-                await setDoc(userDocRef, {
-                    walletAddress: walletAddress.toLowerCase(),
-                    firebaseUid: user.uid,
-                    role: 'government_official', // Default role
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString(),
-                });
-                console.log('✅ New user profile created');
+                    if (!userDoc.exists()) {
+                        // Create new user profile
+                        await setDoc(userDocRef, {
+                            walletAddress: walletAddress.toLowerCase(),
+                            firebaseUid: user.uid,
+                            role: 'government_official', // Default role
+                            createdAt: new Date().toISOString(),
+                            lastLogin: new Date().toISOString(),
+                        });
+                        console.log('✅ New user profile created');
+                    } else {
+                        // Update last login
+                        await setDoc(userDocRef, {
+                            lastLogin: new Date().toISOString(),
+                            firebaseUid: user.uid,
+                        }, { merge: true });
+                        console.log('✅ User login updated');
+                    }
+                } catch (firebaseErr) {
+                    console.warn('⚠️ Firebase auth skipped:', firebaseErr.message);
+                    // Continue without Firebase - wallet is connected
+                }
             } else {
-                // Update last login
-                await setDoc(userDocRef, {
-                    lastLogin: new Date().toISOString(),
-                    firebaseUid: user.uid,
-                }, { merge: true });
-                console.log('✅ User login updated');
+                console.log('ℹ️ Proceeding without Firebase authentication');
             }
 
             setTimeout(() => navigate('/instructions'), 1000);

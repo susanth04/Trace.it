@@ -12,18 +12,29 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-console.log('🔥 Firebase Config:', {
-  apiKey: firebaseConfig.apiKey ? '✅ Set' : '❌ Missing',
-  projectId: firebaseConfig.projectId,
-});
+let app = null;
+let auth = null;
+let db = null;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+try {
+  console.log('🔥 Firebase Config:', {
+    apiKey: firebaseConfig.apiKey ? '✅ Set' : '❌ Missing',
+    projectId: firebaseConfig.projectId,
+  });
 
-// Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+  // Initialize Firebase only if config is valid
+  if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    console.log('✅ Firebase initialized successfully');
+  } else {
+    console.warn('⚠️ Firebase not configured - authentication features will be disabled');
+  }
+} catch (error) {
+  console.warn('⚠️ Firebase initialization failed:', error.message);
+  console.warn('App will continue without authentication features');
+}
 
-// Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
-
+export { auth, db };
 export default app;
