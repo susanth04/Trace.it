@@ -164,7 +164,7 @@ const Instructions = () => {
                                 borderRadius: '8px',
                                 wordBreak: 'break-all'
                             }}>
-                                0x48F2825CB290F54DAD34f7c26869518c8C3B875C
+                                {import.meta.env.VITE_CONTRACT_ADDRESS}
                             </p>
                         </div>
                     </div>
