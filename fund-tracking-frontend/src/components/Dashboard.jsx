@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { web3, contract } from '../web3';
+import { web3, contract, getProjects } from '../web3';
+import { generateMockProjects } from '../mockData';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import ContractDebug from './ContractDebug';
 import './Dashboard.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -11,11 +13,26 @@ function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [useMockData, setUseMockData] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const projectsData = await contract.methods.getProjects().call();
+        setLoading(true);
+        setError(null);
+        setUseMockData(false);
+
+        if (!contract || !web3) {
+          console.log('📌 Using mock data - contract not available');
+          setUseMockData(true);
+          const mockData = generateMockProjects();
+          setProjects(mockData);
+          setLoading(false);
+          return;
+        }
+
+        console.log("📥 Dashboard: Fetching projects from blockchain...");
+        const projectsData = await getProjects();
         
         // Format projects data
         const formattedProjects = projectsData.map((project, index) => ({
@@ -28,10 +45,14 @@ function Dashboard() {
           isActive: project.isActive
         }));
         
+        console.log("✅ Dashboard: Projects loaded from blockchain:", formattedProjects.length);
         setProjects(formattedProjects);
       } catch (error) {
-        console.error('Error fetching projects:', error);
-        setError('Failed to load projects. Please try again later.');
+        console.warn('⚠️ Failed to load from blockchain, using mock data:', error.message);
+        setUseMockData(true);
+        const mockData = generateMockProjects();
+        setProjects(mockData);
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -62,11 +83,31 @@ function Dashboard() {
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return (
+      <div>
+        <ContractDebug />
+        <div className="error">{error}</div>
+      </div>
+    );
   }
 
   return (
     <div className="dashboard">
+      {useMockData && (
+        <div
+          style={{
+            background: 'rgba(248, 113, 113, 0.15)',
+            border: '1px solid rgba(248, 113, 113, 0.3)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            marginBottom: '20px',
+            color: '#fca5a5',
+            fontSize: '14px',
+          }}
+        >
+          📌 <strong>Demo Mode:</strong> Showing sample data. To use real blockchain data, switch MetaMask to Sepolia testnet and deploy the contract.
+        </div>
+      )}
       <h2>Projects Overview</h2>
       
       {projects.length > 0 ? (
@@ -93,8 +134,8 @@ function Dashboard() {
           <div className="projects-list">
             <h3>All Projects</h3>
             <div className="projects-grid">
-              {projects.map(project => (
-                <div key={project.id} className="project-card">
+              {projects.map((project, index) => (
+                <div key={index} className="project-card">
                   <h4>{project.name}</h4>
                   <p className="description">{project.description}</p>
                   <div className="project-stats">
