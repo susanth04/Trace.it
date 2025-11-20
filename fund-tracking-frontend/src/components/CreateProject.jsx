@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { web3, contract, getAccount } from '../web3';
+import { storeProjectMetadata } from '../utils/firebaseHelpers';
 import './CreateProject.css';
 
 function CreateProject() {
@@ -16,7 +17,7 @@ function CreateProject() {
   React.useEffect(() => {
     const setCurrentAccount = async () => {
       const account = await getAccount();
-      setProjectOwner(account);
+      setProjectOwner(account); // Set connected wallet as owner (government)
     };
     setCurrentAccount();
   }, []);
@@ -36,10 +37,37 @@ function CreateProject() {
       const account = await getAccount();
       const amountInWei = web3.utils.toWei(amount, 'ether');
       
-      // Create project using the contract
-      await contract.methods
-        .createProject(name, description, amountInWei, projectOwner)
-        .send({ from: account });
+      // Hash the project data (name + description)
+      const combinedData = name + description;
+      const dataHash = web3.utils.keccak256(combinedData);
+      
+      console.log('Data Hash:', dataHash);
+      console.log('Amount in Wei:', amountInWei);
+      console.log('Project Owner:', projectOwner);
+      
+      // Create project using the contract and send ETH
+      const tx = await contract.methods
+        .createProject(name, description, dataHash, amountInWei, projectOwner)
+        .send({ 
+          from: account,
+          value: amountInWei  // Send the ETH amount
+        });
+      
+      // Get the project ID from the transaction logs
+      const projectId = tx.events?.ProjectCreated?.returnValues?.projectId;
+      
+      // Store metadata in Firestore (off-chain storage for additional data)
+      if (projectId) {
+        await storeProjectMetadata(projectId, {
+          name,
+          description,
+          allocatedAmount: amount,
+          projectOwner,
+          createdBy: account,
+          network: 'sepolia',
+        });
+        console.log('✅ Project metadata stored in Firestore');
+      }
       
       // Redirect to dashboard after successful creation
       navigate('/');
@@ -92,15 +120,16 @@ function CreateProject() {
         </div>
         
         <div className="form-group">
-          <label htmlFor="projectOwner">Project Owner Address</label>
+          <label htmlFor="projectOwner">Project Manager (Government Wallet)</label>
           <input
             type="text"
             id="projectOwner"
             value={projectOwner}
             onChange={(e) => setProjectOwner(e.target.value)}
             required
+            disabled
           />
-          <small>This address will have permission to spend funds</small>
+          <small>This is your connected wallet - you will manage and approve fund spending</small>
         </div>
         
         {error && <div className="error-message">{error}</div>}

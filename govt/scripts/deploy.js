@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const fundTracker = await hre.ethers.deployContract("FundTracker");
+  const fundTracker = await hre.ethers.deployContract("contracts/FundTrackerSecure.sol:FundTracker");
   await fundTracker.waitForDeployment();
   console.log(`FundTracker deployed to ${await fundTracker.getAddress()}`);
 }

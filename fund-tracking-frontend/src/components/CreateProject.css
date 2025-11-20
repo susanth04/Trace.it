@@ -2,33 +2,46 @@
 .create-project {
     max-width: 700px;
     margin: 0 auto;
-    padding: 1rem 0;
+    padding: var(--spacing-lg) var(--spacing-md);
   }
   
   .create-project h2 {
-    margin-bottom: 1.5rem;
-    color: #1a237e;
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-main);
+    font-size: 2rem;
   }
   
   .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
   }
   
   .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.95rem;
   }
   
   .form-group input,
   .form-group textarea {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-md);
     font-size: 1rem;
     font-family: inherit;
+    color: var(--text-main);
+    transition: var(--transition);
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
   }
   
   .form-group textarea {
@@ -38,38 +51,40 @@
   
   .form-group small {
     display: block;
-    margin-top: 0.25rem;
-    color: #666;
+    margin-top: var(--spacing-xs);
+    color: var(--text-muted);
     font-size: 0.8rem;
   }
   
   .error-message {
-    background-color: #ffebee;
-    color: #d32f2f;
-    padding: 1rem;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-    border-left: 4px solid #d32f2f;
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    border-left: 3px solid var(--error);
   }
   
   .submit-button {
-    background-color: #3949ab;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
+    width: 100%;
   }
   
   .submit-button:hover:not(:disabled) {
-    background-color: #303f9f;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
   }
   
   .submit-button:disabled {
-    background-color: #9fa8da;
+    background: rgba(99, 102, 241, 0.3);
     cursor: not-allowed;
   }
   
